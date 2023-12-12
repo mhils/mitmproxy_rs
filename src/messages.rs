@@ -1,6 +1,6 @@
 use std::net::{IpAddr, Ipv4Addr, Ipv6Addr, SocketAddr};
 
-use anyhow::{anyhow, Result};
+use anyhow::{anyhow, bail, Result};
 use smoltcp::wire::{IpProtocol, Ipv4Packet, Ipv6Packet};
 use tokio::sync::oneshot;
 
@@ -60,6 +60,7 @@ pub enum TransportCommand {
     WriteData(ConnectionId, Vec<u8>),
     DrainWriter(ConnectionId, oneshot::Sender<()>),
     CloseConnection(ConnectionId, bool),
+    // FIXME: Remove
     SendDatagram {
         data: Vec<u8>,
         src_addr: SocketAddr,

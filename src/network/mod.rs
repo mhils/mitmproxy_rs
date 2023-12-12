@@ -5,8 +5,10 @@ pub use task::NetworkTask;
 mod virtual_device;
 
 mod icmp;
-mod io;
+mod core;
+mod tcp;
 #[cfg(test)]
 mod tests;
+mod udp;
 
 pub const MAX_PACKET_SIZE: usize = 65535;

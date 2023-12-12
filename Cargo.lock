@@ -1353,7 +1353,9 @@ dependencies = [
  "env_logger",
  "futures-util",
  "image",
+ "internet-packet",
  "log",
+ "lru_time_cache",
  "nix 0.27.1",
  "once_cell",
  "pretty-hex",
@@ -2817,3 +2819,7 @@ checksum = "73ab332fe2f6680068f3582b16a24f90ad7096d5d39b974d1c0aff0125116f02"
 dependencies = [
  "simd-adler32",
 ]
+
+[[patch.unused]]
+name = "internet-packet"
+version = "0.1.0"

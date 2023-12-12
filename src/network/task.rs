@@ -12,7 +12,7 @@ use tokio::sync::{
 use tokio::task::JoinHandle;
 
 use crate::messages::{NetworkCommand, NetworkEvent, TransportCommand, TransportEvent};
-use crate::network::io::NetworkIO;
+use crate::network::core::NetworkStack;
 
 pub struct NetworkTask<'a> {
     net_tx: Sender<NetworkCommand>,
@@ -21,7 +21,7 @@ pub struct NetworkTask<'a> {
     py_rx: UnboundedReceiver<TransportCommand>,
 
     shutdown: BroadcastReceiver<()>,
-    io: NetworkIO<'a>,
+    io: NetworkStack<'a>,
 }
 
 #[allow(clippy::type_complexity)]
@@ -57,7 +57,7 @@ impl NetworkTask<'_> {
         py_rx: UnboundedReceiver<TransportCommand>,
         sd_watcher: BroadcastReceiver<()>,
     ) -> Result<Self> {
-        let io = NetworkIO::new(net_tx.clone());
+        let io = NetworkStack::new(net_tx.clone());
         Ok(Self {
             net_tx,
             net_rx,
