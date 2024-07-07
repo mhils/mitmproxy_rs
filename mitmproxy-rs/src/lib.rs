@@ -11,6 +11,8 @@ mod stream;
 mod task;
 mod udp_client;
 mod util;
+mod dns;
+// mod dns2;
 
 static LOGGER_INITIALIZED: Lazy<RwLock<bool>> = Lazy::new(|| RwLock::new(false));
 
@@ -58,6 +60,8 @@ pub fn mitmproxy_rs(py: Python, m: &Bound<'_, PyModule>) -> PyResult<()> {
     m.add_function(wrap_pyfunction!(process_info::active_executables, m)?)?;
     m.add_class::<process_info::Process>()?;
     m.add_function(wrap_pyfunction!(process_info::executable_icon, m)?)?;
+
+    m.add_function(wrap_pyfunction!(dns::parse_dns_message, m)?)?;
 
     m.add_class::<stream::Stream>()?;
 
