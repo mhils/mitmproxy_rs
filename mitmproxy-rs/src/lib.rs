@@ -12,6 +12,7 @@ mod dns_resolver;
 mod process_info;
 mod server;
 mod stream;
+mod syntax_highlight;
 pub mod task;
 mod udp_client;
 mod util;
@@ -91,14 +92,15 @@ mod mitmproxy_rs {
         use crate::contentview::Contentview;
         #[pymodule_export]
         use crate::contentview::InteractiveContentview;
-        use mitmproxy::contentviews::{HexDump, HexStream, MsgPack, Protobuf};
+        use mitmproxy::contentviews::{HexDump, HexStream, MsgPack, Protobuf, GRPC};
 
         #[pymodule_init]
         fn init(m: &Bound<'_, PyModule>) -> PyResult<()> {
             m.add_contentview(&HexDump)?;
             m.add_interactive_contentview(&HexStream)?;
             m.add_interactive_contentview(&MsgPack)?;
-            m.add_contentview(&Protobuf)?;
+            m.add_interactive_contentview(&Protobuf)?;
+            m.add_interactive_contentview(&GRPC)?;
             Ok(())
         }
     }
@@ -125,6 +127,14 @@ mod mitmproxy_rs {
         m.py().import("mitmproxy_windows")?;
 
         Ok(())
+    }
+
+    #[pymodule]
+    mod syntax_highlight {
+        #[pymodule_export]
+        use crate::syntax_highlight::highlight;
+        #[pymodule_export]
+        use crate::syntax_highlight::tags;
     }
 }
 

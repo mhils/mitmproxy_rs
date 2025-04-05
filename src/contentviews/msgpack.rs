@@ -1,4 +1,6 @@
-use crate::contentviews::{Prettify, PrettifyError, Reencode, ReencodeError};
+use crate::contentviews::{Metadata, Prettify, Reencode};
+use crate::syntax_highlight::Language;
+use anyhow::{Context, Result};
 use rmp_serde::{decode, encode};
 use serde_yaml;
 
@@ -9,28 +11,28 @@ impl Prettify for MsgPack {
         "MsgPack"
     }
 
-    fn prettify(&self, data: Vec<u8>) -> Result<String, PrettifyError> {
+    fn syntax_highlight(&self) -> Language {
+        Language::Yaml
+    }
+
+    fn prettify(&self, data: &[u8], _metadata: &dyn Metadata) -> Result<String> {
         // Deserialize MsgPack to a serde_yaml::Value
-        let value: serde_yaml::Value = decode::from_slice(&data)
-            .map_err(|e| PrettifyError::Generic(format!("Failed to deserialize MsgPack: {}", e)))?;
+        let value: serde_yaml::Value =
+            decode::from_slice(data).context("Failed to deserialize MsgPack")?;
 
         // Convert the Value to prettified YAML
-        serde_yaml::to_string(&value)
-            .map_err(|e| PrettifyError::Generic(format!("Failed to convert to YAML: {}", e)))
+        serde_yaml::to_string(&value).context("Failed to convert to YAML")
     }
 }
 
 impl Reencode for MsgPack {
-    fn reencode(&self, data: String) -> anyhow::Result<Vec<u8>, ReencodeError> {
+    fn reencode(&self, data: &str, _metadata: &dyn Metadata) -> Result<Vec<u8>> {
         // Parse the YAML string to a serde_yaml::Value
-        let value: serde_yaml::Value = serde_yaml::from_str(&data)
-            .map_err(|e| ReencodeError::InvalidFormat(format!("Invalid YAML: {}", e)))?;
+        let value: serde_yaml::Value = serde_yaml::from_str(data).context("Invalid YAML")?;
 
         // Serialize the Value to MsgPack
         let mut buf = Vec::new();
-        encode::write_named(&mut buf, &value).map_err(|e| {
-            ReencodeError::InvalidFormat(format!("Failed to encode to MsgPack: {}", e))
-        })?;
+        encode::write_named(&mut buf, &value).context("Failed to encode to MsgPack")?;
 
         Ok(buf)
     }
@@ -39,6 +41,7 @@ impl Reencode for MsgPack {
 #[cfg(test)]
 mod tests {
     use super::*;
+    use crate::contentviews::TestMetadata;
 
     // Hardcoded MsgPack data for a simple object:
     // {
@@ -68,15 +71,17 @@ tags:
 
     #[test]
     fn test_msgpack_deserialize() {
-        let result = MsgPack.prettify(TEST_MSGPACK.to_vec()).unwrap();
+        let result = MsgPack
+            .prettify(TEST_MSGPACK, &TestMetadata::default())
+            .unwrap();
         assert_eq!(result, TEST_YAML);
     }
 
     #[test]
     fn test_msgpack_serialize() {
-        let yaml_data = TEST_YAML.to_string();
-
-        let result = MsgPack.reencode(yaml_data).unwrap();
+        let result = MsgPack
+            .reencode(TEST_YAML, &TestMetadata::default())
+            .unwrap();
 
         // Verify the MsgPack data contains the expected values
         let value: serde_yaml::Value = decode::from_slice(&result).unwrap();
@@ -108,14 +113,15 @@ tags:
 
     #[test]
     fn test_msgpack_roundtrip() {
-        // Start with the hardcoded MsgPack data
-        let msgpack_data = TEST_MSGPACK.to_vec();
-
         // Deserialize to YAML
-        let yaml_result = MsgPack.prettify(msgpack_data).unwrap();
+        let yaml_result = MsgPack
+            .prettify(TEST_MSGPACK, &TestMetadata::default())
+            .unwrap();
 
         // Serialize back to MsgPack
-        let result = MsgPack.reencode(yaml_result).unwrap();
+        let result = MsgPack
+            .reencode(&yaml_result, &TestMetadata::default())
+            .unwrap();
 
         // Deserialize both the original and the result to Values for comparison
         let original_value: serde_yaml::Value = decode::from_slice(TEST_MSGPACK).unwrap();

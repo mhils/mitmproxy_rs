@@ -1,4 +1,5 @@
-use crate::contentviews::{Prettify, PrettifyError};
+use crate::contentviews::hex_stream::is_binary;
+use crate::contentviews::{Metadata, Prettify};
 use pretty_hex::{HexConfig, PrettyHex};
 
 pub struct HexDump;
@@ -8,7 +9,7 @@ impl Prettify for HexDump {
         "Hex Dump"
     }
 
-    fn prettify(&self, data: Vec<u8>) -> Result<String, PrettifyError> {
+    fn prettify(&self, data: &[u8], _metadata: &dyn Metadata) -> anyhow::Result<String> {
         Ok(format!(
             "{:?}",
             data.hex_conf(HexConfig {
@@ -22,16 +23,24 @@ impl Prettify for HexDump {
             })
         ))
     }
+
+    fn render_priority(&self, data: &[u8], _metadata: &dyn Metadata) -> f64 {
+        if is_binary(data) {
+            0.95
+        } else {
+            0.0
+        }
+    }
 }
 
 #[cfg(test)]
 mod tests {
     use super::*;
+    use crate::contentviews::TestMetadata;
 
     #[test]
-    fn test_hexdump_deserialize() {
-        let data = b"abcd".to_vec();
-        let result = HexDump.prettify(data).unwrap();
+    fn prettify_simple() {
+        let result = HexDump.prettify(b"abcd", &TestMetadata::default()).unwrap();
         assert_eq!(
             result,
             "0000:   61 62 63 64                                          abcd"
@@ -39,9 +48,8 @@ mod tests {
     }
 
     #[test]
-    fn test_hexdump_deserialize_empty() {
-        let data = vec![];
-        let result = HexDump.prettify(data).unwrap();
+    fn prettify_empty() {
+        let result = HexDump.prettify(b"", &TestMetadata::default()).unwrap();
         assert_eq!(result, "");
     }
 }

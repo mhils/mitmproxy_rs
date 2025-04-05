@@ -1,44 +1,20 @@
+mod grpc;
 mod hex_dump;
 mod hex_stream;
 mod msgpack;
 mod protobuf;
 
 use anyhow::Result;
-use std::fmt::{Display, Formatter};
 
+use crate::syntax_highlight;
+pub use grpc::GRPC;
 pub use hex_dump::HexDump;
 pub use hex_stream::HexStream;
 pub use msgpack::MsgPack;
 pub use protobuf::Protobuf;
 
-#[derive(Debug)]
-pub enum ReencodeError {
-    InvalidFormat(String),
-}
-
-impl Display for ReencodeError {
-    fn fmt(&self, f: &mut Formatter<'_>) -> std::fmt::Result {
-        match self {
-            ReencodeError::InvalidFormat(e) => {
-                write!(f, "invalid format: {}", e)
-            }
-        }
-    }
-}
-
-#[derive(Debug)]
-pub enum PrettifyError {
-    Generic(String),
-}
-
-impl Display for PrettifyError {
-    fn fmt(&self, f: &mut Formatter<'_>) -> std::fmt::Result {
-        match self {
-            PrettifyError::Generic(e) => {
-                write!(f, "deserialize error: {}", e)
-            }
-        }
-    }
+pub trait Metadata {
+    fn content_type(&self) -> Option<String>;
 }
 
 pub trait Prettify: Send + Sync {
@@ -48,9 +24,28 @@ pub trait Prettify: Send + Sync {
         self.name().to_lowercase().replace(" ", "_")
     }
 
-    fn prettify(&self, data: Vec<u8>) -> Result<String, PrettifyError>;
+    fn prettify(&self, data: &[u8], metadata: &dyn Metadata) -> Result<String>;
+
+    fn render_priority(&self, _data: &[u8], _metadata: &dyn Metadata) -> f64 {
+        0.0
+    }
+
+    fn syntax_highlight(&self) -> syntax_highlight::Language {
+        syntax_highlight::Language::None
+    }
 }
 
 pub trait Reencode: Send + Sync {
-    fn reencode(&self, data: String) -> Result<Vec<u8>, ReencodeError>;
+    fn reencode(&self, data: &str, metadata: &dyn Metadata) -> Result<Vec<u8>>;
+}
+
+#[derive(Default)]
+pub struct TestMetadata {
+    pub content_type: Option<String>,
+}
+
+impl Metadata for TestMetadata {
+    fn content_type(&self) -> Option<String> {
+        self.content_type.clone()
+    }
 }

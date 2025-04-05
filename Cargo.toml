@@ -73,6 +73,10 @@ serde_yaml = "0.9"
 rmp-serde = "1.1"
 protobuf = "3.7.2"
 regex = "1.10.3"
+tree-sitter-highlight = "0.25.3"
+tree-sitter-yaml = "0.7.0"
+tree-sitter-xml = "0.7.0"
+tree-sitter = "0.25.3"
 
 [patch.crates-io]
 # tokio = { path = "../tokio/tokio" }
@@ -117,6 +121,14 @@ hickory-server = "0.24.4"
 
 [[bench]]
 name = "process"
+harness = false
+
+[[bench]]
+name = "contentviews"
+harness = false
+
+[[bench]]
+name = "syntax_highlight"
 harness = false
 
 [profile.release]

@@ -1,6 +1,23 @@
-use anyhow::{anyhow, Result};
-use mitmproxy::contentviews::{Prettify, Reencode};
-use pyo3::prelude::*;
+use mitmproxy::contentviews::{Metadata, Prettify, Reencode};
+use pyo3::{exceptions::PyValueError, prelude::*};
+
+pub struct PythonMetadata<'py>(Bound<'py, PyAny>);
+
+impl Metadata for PythonMetadata<'_> {
+    fn content_type(&self) -> Option<String> {
+        self.0
+            .getattr("content_type")
+            .ok()?
+            .extract::<String>()
+            .ok()
+    }
+}
+
+impl<'py> FromPyObject<'py> for PythonMetadata<'py> {
+    fn extract_bound(ob: &Bound<'py, PyAny>) -> PyResult<Self> {
+        Ok(PythonMetadata(ob.clone()))
+    }
+}
 
 #[pyclass(frozen, module = "mitmproxy_rs.contentviews", subclass)]
 pub struct Contentview(&'static dyn Prettify);
@@ -23,8 +40,25 @@ impl Contentview {
     }
 
     /// Pretty-print an (encoded) message.
-    pub fn prettify<'py>(&self, data: Vec<u8>) -> Result<String> {
-        self.0.prettify(data).map_err(|e| anyhow!("{e}"))
+    pub fn prettify(&self, data: Vec<u8>, metadata: PythonMetadata) -> PyResult<String> {
+        self.0
+            .prettify(&data, &metadata)
+            .map_err(|e| PyValueError::new_err(e.to_string()))
+    }
+
+    /// Return the priority of this view for rendering data.
+    pub fn render_priority(&self, data: Vec<u8>, metadata: PythonMetadata) -> PyResult<f64> {
+        Ok(self.0.render_priority(&data, &metadata))
+    }
+
+    /// Optional syntax highlighting that should be applied to the prettified output.
+    #[getter]
+    pub fn syntax_highlight(&self) -> String {
+        self.0.syntax_highlight().to_string()
+    }
+
+    fn __lt__(&self, py: Python<'_>, other: PyObject) -> PyResult<bool> {
+        Ok(self.name() < other.getattr(py, "name")?.extract::<String>(py)?.as_str())
     }
 
     fn __repr__(&self) -> PyResult<String> {
@@ -52,8 +86,10 @@ impl InteractiveContentview {
 
 #[pymethods]
 impl InteractiveContentview {
-    pub fn reencode(&self, data: String) -> Result<Vec<u8>> {
-        self.0.reencode(data).map_err(|e| anyhow!("{e}"))
+    pub fn reencode(&self, data: &str, metadata: PythonMetadata) -> PyResult<Vec<u8>> {
+        self.0
+            .reencode(data, &metadata)
+            .map_err(|e| PyValueError::new_err(e.to_string()))
     }
 
     fn __repr__(self_: PyRef<'_, Self>) -> PyResult<String> {
