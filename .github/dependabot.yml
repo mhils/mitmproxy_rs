@@ -21,3 +21,7 @@ updates:
       dependencies:
         patterns:
           - "*"
+  - package-ecosystem: swift
+    directory: "/mitmproxy-macos/redirector"
+    schedule:
+      interval: "monthly"
