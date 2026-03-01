@@ -22,7 +22,7 @@ fileprivate struct _GeneratedWithProtocGenSwiftVersion: SwiftProtobuf.ProtobufAP
 }
 
 /// Packet with associated tunnel info (Windows pipe to mitmproxy)
-struct MitmproxyIpc_PacketWithMeta: @unchecked Sendable {
+struct MitmproxyIpc_PacketWithMeta: Sendable {
   // SwiftProtobuf.Message conformance is added in an extension below. See the
   // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
   // methods supported on all messages.
@@ -30,11 +30,11 @@ struct MitmproxyIpc_PacketWithMeta: @unchecked Sendable {
   var data: Data = Data()
 
   var tunnelInfo: MitmproxyIpc_TunnelInfo {
-    get {return _tunnelInfo ?? MitmproxyIpc_TunnelInfo()}
+    get {_tunnelInfo ?? MitmproxyIpc_TunnelInfo()}
     set {_tunnelInfo = newValue}
   }
   /// Returns true if `tunnelInfo` has been explicitly set.
-  var hasTunnelInfo: Bool {return self._tunnelInfo != nil}
+  var hasTunnelInfo: Bool {self._tunnelInfo != nil}
   /// Clears the value of `tunnelInfo`. Subsequent reads from it will return its default value.
   mutating func clearTunnelInfo() {self._tunnelInfo = nil}
 
@@ -51,20 +51,20 @@ struct MitmproxyIpc_TunnelInfo: Sendable {
   // methods supported on all messages.
 
   var pid: UInt32 {
-    get {return _pid ?? 0}
+    get {_pid ?? 0}
     set {_pid = newValue}
   }
   /// Returns true if `pid` has been explicitly set.
-  var hasPid: Bool {return self._pid != nil}
+  var hasPid: Bool {self._pid != nil}
   /// Clears the value of `pid`. Subsequent reads from it will return its default value.
   mutating func clearPid() {self._pid = nil}
 
   var processName: String {
-    get {return _processName ?? String()}
+    get {_processName ?? String()}
     set {_processName = newValue}
   }
   /// Returns true if `processName` has been explicitly set.
-  var hasProcessName: Bool {return self._processName != nil}
+  var hasProcessName: Bool {self._processName != nil}
   /// Clears the value of `processName`. Subsequent reads from it will return its default value.
   mutating func clearProcessName() {self._processName = nil}
 
@@ -113,7 +113,7 @@ struct MitmproxyIpc_FromProxy: Sendable {
 
 /// Packet (macOS UDP Stream)
 /// ⚠️ Bump network extension version on changes, https://github.com/mitmproxy/mitmproxy_rs/pull/227.
-struct MitmproxyIpc_Packet: @unchecked Sendable {
+struct MitmproxyIpc_Packet: Sendable {
   // SwiftProtobuf.Message conformance is added in an extension below. See the
   // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
   // methods supported on all messages.
@@ -182,20 +182,20 @@ struct MitmproxyIpc_TcpFlow: Sendable {
   // methods supported on all messages.
 
   var remoteAddress: MitmproxyIpc_Address {
-    get {return _remoteAddress ?? MitmproxyIpc_Address()}
+    get {_remoteAddress ?? MitmproxyIpc_Address()}
     set {_remoteAddress = newValue}
   }
   /// Returns true if `remoteAddress` has been explicitly set.
-  var hasRemoteAddress: Bool {return self._remoteAddress != nil}
+  var hasRemoteAddress: Bool {self._remoteAddress != nil}
   /// Clears the value of `remoteAddress`. Subsequent reads from it will return its default value.
   mutating func clearRemoteAddress() {self._remoteAddress = nil}
 
   var tunnelInfo: MitmproxyIpc_TunnelInfo {
-    get {return _tunnelInfo ?? MitmproxyIpc_TunnelInfo()}
+    get {_tunnelInfo ?? MitmproxyIpc_TunnelInfo()}
     set {_tunnelInfo = newValue}
   }
   /// Returns true if `tunnelInfo` has been explicitly set.
-  var hasTunnelInfo: Bool {return self._tunnelInfo != nil}
+  var hasTunnelInfo: Bool {self._tunnelInfo != nil}
   /// Clears the value of `tunnelInfo`. Subsequent reads from it will return its default value.
   mutating func clearTunnelInfo() {self._tunnelInfo = nil}
 
@@ -214,20 +214,20 @@ struct MitmproxyIpc_UdpFlow: Sendable {
   // methods supported on all messages.
 
   var localAddress: MitmproxyIpc_Address {
-    get {return _localAddress ?? MitmproxyIpc_Address()}
+    get {_localAddress ?? MitmproxyIpc_Address()}
     set {_localAddress = newValue}
   }
   /// Returns true if `localAddress` has been explicitly set.
-  var hasLocalAddress: Bool {return self._localAddress != nil}
+  var hasLocalAddress: Bool {self._localAddress != nil}
   /// Clears the value of `localAddress`. Subsequent reads from it will return its default value.
   mutating func clearLocalAddress() {self._localAddress = nil}
 
   var tunnelInfo: MitmproxyIpc_TunnelInfo {
-    get {return _tunnelInfo ?? MitmproxyIpc_TunnelInfo()}
+    get {_tunnelInfo ?? MitmproxyIpc_TunnelInfo()}
     set {_tunnelInfo = newValue}
   }
   /// Returns true if `tunnelInfo` has been explicitly set.
-  var hasTunnelInfo: Bool {return self._tunnelInfo != nil}
+  var hasTunnelInfo: Bool {self._tunnelInfo != nil}
   /// Clears the value of `tunnelInfo`. Subsequent reads from it will return its default value.
   mutating func clearTunnelInfo() {self._tunnelInfo = nil}
 
@@ -239,7 +239,7 @@ struct MitmproxyIpc_UdpFlow: Sendable {
   fileprivate var _tunnelInfo: MitmproxyIpc_TunnelInfo? = nil
 }
 
-struct MitmproxyIpc_UdpPacket: @unchecked Sendable {
+struct MitmproxyIpc_UdpPacket: Sendable {
   // SwiftProtobuf.Message conformance is added in an extension below. See the
   // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
   // methods supported on all messages.
@@ -247,11 +247,11 @@ struct MitmproxyIpc_UdpPacket: @unchecked Sendable {
   var data: Data = Data()
 
   var remoteAddress: MitmproxyIpc_Address {
-    get {return _remoteAddress ?? MitmproxyIpc_Address()}
+    get {_remoteAddress ?? MitmproxyIpc_Address()}
     set {_remoteAddress = newValue}
   }
   /// Returns true if `remoteAddress` has been explicitly set.
-  var hasRemoteAddress: Bool {return self._remoteAddress != nil}
+  var hasRemoteAddress: Bool {self._remoteAddress != nil}
   /// Clears the value of `remoteAddress`. Subsequent reads from it will return its default value.
   mutating func clearRemoteAddress() {self._remoteAddress = nil}
 
@@ -282,10 +282,7 @@ fileprivate let _protobuf_package = "mitmproxy_ipc"
 
 extension MitmproxyIpc_PacketWithMeta: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
   static let protoMessageName: String = _protobuf_package + ".PacketWithMeta"
-  static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
-    1: .same(proto: "data"),
-    2: .standard(proto: "tunnel_info"),
-  ]
+  static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{1}data\0\u{3}tunnel_info\0")
 
   mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
     while let fieldNumber = try decoder.nextFieldNumber() {
@@ -324,10 +321,7 @@ extension MitmproxyIpc_PacketWithMeta: SwiftProtobuf.Message, SwiftProtobuf._Mes
 
 extension MitmproxyIpc_TunnelInfo: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
   static let protoMessageName: String = _protobuf_package + ".TunnelInfo"
-  static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
-    1: .same(proto: "pid"),
-    2: .standard(proto: "process_name"),
-  ]
+  static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{1}pid\0\u{3}process_name\0")
 
   mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
     while let fieldNumber = try decoder.nextFieldNumber() {
@@ -366,10 +360,7 @@ extension MitmproxyIpc_TunnelInfo: SwiftProtobuf.Message, SwiftProtobuf._Message
 
 extension MitmproxyIpc_FromProxy: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
   static let protoMessageName: String = _protobuf_package + ".FromProxy"
-  static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
-    1: .same(proto: "packet"),
-    2: .standard(proto: "intercept_conf"),
-  ]
+  static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{1}packet\0\u{3}intercept_conf\0")
 
   mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
     while let fieldNumber = try decoder.nextFieldNumber() {
@@ -436,9 +427,7 @@ extension MitmproxyIpc_FromProxy: SwiftProtobuf.Message, SwiftProtobuf._MessageI
 
 extension MitmproxyIpc_Packet: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
   static let protoMessageName: String = _protobuf_package + ".Packet"
-  static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
-    1: .same(proto: "data"),
-  ]
+  static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{1}data\0")
 
   mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
     while let fieldNumber = try decoder.nextFieldNumber() {
@@ -468,9 +457,7 @@ extension MitmproxyIpc_Packet: SwiftProtobuf.Message, SwiftProtobuf._MessageImpl
 
 extension MitmproxyIpc_InterceptConf: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
   static let protoMessageName: String = _protobuf_package + ".InterceptConf"
-  static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
-    1: .same(proto: "actions"),
-  ]
+  static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{1}actions\0")
 
   mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
     while let fieldNumber = try decoder.nextFieldNumber() {
@@ -500,10 +487,7 @@ extension MitmproxyIpc_InterceptConf: SwiftProtobuf.Message, SwiftProtobuf._Mess
 
 extension MitmproxyIpc_NewFlow: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
   static let protoMessageName: String = _protobuf_package + ".NewFlow"
-  static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
-    1: .same(proto: "tcp"),
-    2: .same(proto: "udp"),
-  ]
+  static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{1}tcp\0\u{1}udp\0")
 
   mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
     while let fieldNumber = try decoder.nextFieldNumber() {
@@ -570,10 +554,7 @@ extension MitmproxyIpc_NewFlow: SwiftProtobuf.Message, SwiftProtobuf._MessageImp
 
 extension MitmproxyIpc_TcpFlow: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
   static let protoMessageName: String = _protobuf_package + ".TcpFlow"
-  static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
-    1: .standard(proto: "remote_address"),
-    2: .standard(proto: "tunnel_info"),
-  ]
+  static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{3}remote_address\0\u{3}tunnel_info\0")
 
   mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
     while let fieldNumber = try decoder.nextFieldNumber() {
@@ -612,10 +593,7 @@ extension MitmproxyIpc_TcpFlow: SwiftProtobuf.Message, SwiftProtobuf._MessageImp
 
 extension MitmproxyIpc_UdpFlow: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
   static let protoMessageName: String = _protobuf_package + ".UdpFlow"
-  static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
-    1: .standard(proto: "local_address"),
-    3: .standard(proto: "tunnel_info"),
-  ]
+  static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{3}local_address\0\u{4}\u{2}tunnel_info\0")
 
   mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
     while let fieldNumber = try decoder.nextFieldNumber() {
@@ -654,10 +632,7 @@ extension MitmproxyIpc_UdpFlow: SwiftProtobuf.Message, SwiftProtobuf._MessageImp
 
 extension MitmproxyIpc_UdpPacket: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
   static let protoMessageName: String = _protobuf_package + ".UdpPacket"
-  static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
-    1: .same(proto: "data"),
-    2: .standard(proto: "remote_address"),
-  ]
+  static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{1}data\0\u{3}remote_address\0")
 
   mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
     while let fieldNumber = try decoder.nextFieldNumber() {
@@ -696,10 +671,7 @@ extension MitmproxyIpc_UdpPacket: SwiftProtobuf.Message, SwiftProtobuf._MessageI
 
 extension MitmproxyIpc_Address: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
   static let protoMessageName: String = _protobuf_package + ".Address"
-  static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
-    1: .same(proto: "host"),
-    2: .same(proto: "port"),
-  ]
+  static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{1}host\0\u{1}port\0")
 
   mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
     while let fieldNumber = try decoder.nextFieldNumber() {
